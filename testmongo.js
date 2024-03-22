@@ -88,7 +88,7 @@ app.get('/show-me-my-cookies', function(req,res) {
       cookiesLeave += `${cookie}: ${everyCookie[cookie]} <br>`;
     }
   }
-  cookiesLeave = '<br> <a href="/Homepage.html">Go back to home page</a> <br><br> <a href="/eat-all-cookies">Eat Cookies</a>';
+  cookiesLeave += '<br> <a href="/Homepage.html">Go back to home page</a> <br><br> <a href="/eat-all-cookies">Eat Cookies</a>';
   res.send(cookiesLeave);
 });
 
