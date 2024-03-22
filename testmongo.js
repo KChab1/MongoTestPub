@@ -14,14 +14,14 @@ app.use(express.urlencoded({ extended: true }));
 // Default route:
 app.post('/login', async function(req,res){
   console.log("login: "+req.body);
-  const {userID, userPass} = req.body;
+  const {_,userID, userPass} = req.body;
   const mongoC = new MongoClient(uri);
   try{
     await mongoC.connect();
     const conn = mongoC.db("DbexpoAssignment");
     const connectCollection = conn.collection('hearty');
 
-    const loginUser = await connectCollection.findOne({userID,userPass});
+    const loginUser = await connectCollection.findOne({_,userID,userPass});
 
     if(loginUser){
       res.sendFile(__dirname + '/home.html')
@@ -40,14 +40,14 @@ app.post('/login', async function(req,res){
 
 app.post('/register',async function(req,res){
   console.log("register: "+req.body);
-  const {userID, userPass} = req.body;
+  const {_, userID, userPass} = req.body;
   const mongoC = new MongoClient(uri);
   try{
     await mongoC.connect();
     const conn = mongoC.db("DbexpoAssignment");
     const connectCollection = conn.collection('hearty');
 
-    await connectCollection.insertOne({userID, userPass});
+    await connectCollection.insertOne({_,userID, userPass});
     console.log("Registration successful", userID);
 
     res.redirect('/login.html');
