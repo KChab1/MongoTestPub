@@ -95,9 +95,9 @@ app.get('/eat-all-cookies', function(req,res){
     for (const cookie in everyCookie){
       res.clearCookie(cookie);
     }
-    res.send("Successfully ate all cookies num num. <a href="/">Back to Default Page</a><br><br><a href="/show-me-my-cookies">Show me the cookies</a>");
+    res.send('Successfully ate all cookies num num. <a href="/">Back to Default Page</a><br><br><a href="/show-me-my-cookies">Show me the cookies</a>');
   }
   else{
-    res.send("Could not eat all cookies :( . <a href="/"> Back to Default Page </a><br><br><a href="/show-me-my-cookies">Show me the cookies</a>")
+    res.send('Could not eat all cookies :( . <a href="/"> Back to Default Page </a><br><br><a href="/show-me-my-cookies">Show me the cookies</a>')
   }
 });
