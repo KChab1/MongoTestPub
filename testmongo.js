@@ -13,6 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 // routes will go here
 // Default route:
 app.post('/login', async function(req,res){
+  console.log("login: "+req.body);
   const {userID, userPass} = req.body;
   const mongoC = new MongoClient(uri);
   try{
@@ -38,6 +39,7 @@ app.post('/login', async function(req,res){
 });
 
 app.post('/register',async function(req,res){
+  console.log("register: "+req.body);
   const {userID, userPass} = req.body;
   const mongoC = new MongoClient(uri);
   try{
