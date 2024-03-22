@@ -65,6 +65,10 @@ app.get('/register.html', function(req,res){
   res.sendFile(__dirname + '/register.html');
 });
 
+app.get('/Homepage.html', function(req,res){
+  res.sendFile(__dirname + '/Homepage.html');
+})
+
 //route for default
 app.get('/', function(req,res){
   res.sendFile(__dirname + "/register.html")
