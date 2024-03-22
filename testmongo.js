@@ -1,56 +1,49 @@
 const { MongoClient } = require("mongodb");
-
+const cookieParser = require("cookie-parser");
 // The uri string must be the connection string for the database (obtained on Atlas).
-const uri = "mongodb+srv://<user>:<password>@ckmdb.5oxvqja.mongodb.net/?retryWrites=true&w=majority";
-
+const uri = "mongodb+srv://testUser12345:acoolpassword@cluster0.o8040xd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 // --- This is the standard stuff to get it to work on the browser
 const express = require('express');
 const app = express();
 const port = 3000;
 app.listen(port);
 console.log('Server started at http://localhost:' + port);
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 // routes will go here
-
 // Default route:
-app.get('/', function(req, res) {
-  const myquery = req.query;
-  var outstring = 'Starting... ';
-  res.send(outstring);
-});
 
-app.get('/say/:name', function(req, res) {
-  res.send('Hello ' + req.params.name + '!');
-});
+app.post('/register',async function(req,res){
+  const {userID, userPass} = req.body;
+  const mongoC = new MongoClient(uri);
+  try{
+    await mongoC.connect();
+    const conn = mongoC.db("DbexpoAssignment");
+    const connectCollection = conn.collection('hearty');
 
+    await connectCollection.insertOne({userID, userPass});
+    console.log("Registration successful", userID);
 
-// Route to access database:
-app.get('/api/mongo/:item', function(req, res) {
-const client = new MongoClient(uri);
-const searchKey = "{ partID: '" + req.params.item + "' }";
-console.log("Looking for: " + searchKey);
-
-async function run() {
-  try {
-    const database = client.db('ckmdb');
-    const parts = database.collection('cmps415');
-
-    // Hardwired Query for a part that has partID '12345'
-    // const query = { partID: '12345' };
-    // But we will use the parameter provided with the route
-    const query = { partID: req.params.item };
-
-    const part = await parts.findOne(query);
-    console.log(part);
-    res.send('Found this: ' + JSON.stringify(part));  //Use stringify to print a json
-
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
+    res.redirect('/login.html');
+  }catch(err){
+    console.error("Registration Failed", err);
+    res.status(500).send("Failed to Register");
+  }finally{
+    await mongoC.close;
   }
-}
-run().catch(console.dir);
+});
+
+//route for registration
+app.get('/register.html', function(req,res){
+  res.sendFile(__dirname + '/register.html');
+});
+
+//route for default
+app.get('/', function(req,res){
+  res.sendFile(__dirname + "/register.html")
+})
+
+//route for login screen
+app.get('/login.html', function(req,res){
+  res.sendFile(__dirname + "/login.html")
 });
