@@ -12,6 +12,30 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // routes will go here
 // Default route:
+app.post('/login', async function(req,res){
+  const {userID, userPass} = req.body;
+  const mongoC = new MongoClient(uri);
+  try{
+    await mongoC.connect();
+    const conn = mongoC.db("DbexpoAssignment");
+    const connectCollection = conn.collection('hearty');
+
+    const loginUser = await connectCollection.findOne({userID,userPass});
+
+    if(loginUser){
+      res.sendFile(__dirname + '/home.html')
+
+    }
+    else{
+      res.send('Login attempt failed. <br><br> <a href="/">Click to go back to default</a>');
+    }
+  }catch(error){
+    console.error("Failed to Login", error);
+    res.status(500).send("Failed to Login");
+  }finally{
+    await mongoC.close();
+  }
+});
 
 app.post('/register',async function(req,res){
   const {userID, userPass} = req.body;
@@ -25,8 +49,8 @@ app.post('/register',async function(req,res){
     console.log("Registration successful", userID);
 
     res.redirect('/login.html');
-  }catch(err){
-    console.error("Registration Failed", err);
+  }catch(error){
+    console.error("Registration Failed", error);
     res.status(500).send("Failed to Register");
   }finally{
     await mongoC.close;
