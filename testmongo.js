@@ -10,6 +10,8 @@ app.listen(port);
 console.log('Server started at http://localhost:' + port);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
+app.use(cookieParser());
 // routes will go here
 // Default route:
 app.post('/login', async function(req,res){
@@ -80,7 +82,7 @@ app.get('/login.html', function(req,res){
 });
 
 app.get('/show-me-my-cookies', function(req,res) {
-  const everyCookie = req.cookie;
+  const everyCookie = req.cookies;
   let cookiesLeave = "";
 
   for (const cookie in everyCookie) {
@@ -93,15 +95,11 @@ app.get('/show-me-my-cookies', function(req,res) {
 });
 
 app.get('/eat-all-cookies', function(req,res){
-  const everyCookie = req.cookie;
+  const everyCookie = req.cookies;
 
-  if(Object.keys(everyCookie).length>0){
-    for (const cookie in everyCookie){
-      res.clearCookie(cookie);
-    }
-    res.send('Successfully ate all cookies num num. <a href="/">Back to Default Page</a><br><br><a href="/show-me-my-cookies">Show me the cookies</a>');
+
+  for (const cookie in everyCookie){
+    res.clearCookie(cookie);
   }
-  else{
-    res.send('Could not eat all cookies :( . <a href="/"> Back to Default Page </a><br><br><a href="/show-me-my-cookies">Show me the cookies</a>')
-  }
+  res.send('Successfully ate all cookies num num. <a href="/">Back to Default Page</a><br><br><a href="/show-me-my-cookies">Show me the cookies</a>');
 });
