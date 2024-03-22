@@ -26,7 +26,7 @@ app.post('/login', async function(req,res){
     if(loginUser){
       res.cookie(userID, Date.now(), {maxAge: 60000});
       console.log("User successfully logged in and cookie has been created: ", userID);
-      res.sendFile(__dirname + '/home.html')
+      res.sendFile(__dirname + '/Homepage.html')
 
     }
     else{
