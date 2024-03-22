@@ -24,6 +24,8 @@ app.post('/login', async function(req,res){
     const loginUser = await connectCollection.findOne({userID,userPass});
 
     if(loginUser){
+      res.cookie(userID, Date.now(), {maxAge: 60000});
+      console.log("User successfully logged in and cookie has been created: ", userID);
       res.sendFile(__dirname + '/home.html')
 
     }
@@ -39,7 +41,6 @@ app.post('/login', async function(req,res){
 });
 
 app.post('/register',async function(req,res){
-  console.log("register: "+req.body);
   const {userID, userPass} = req.body;
   const mongoC = new MongoClient(uri);
   try{
@@ -72,4 +73,31 @@ app.get('/', function(req,res){
 //route for login screen
 app.get('/login.html', function(req,res){
   res.sendFile(__dirname + "/login.html")
+});
+
+app.get('/show-me-my-cookies', function(req,res) {
+  const everyCookie = req.cookie;
+  let cookiesLeave = "";
+
+  for (const cookie in everyCookie) {
+    if (everyCookie.hasOwnProperty(cookie)) {
+      cookiesLeave += `${cookie}: ${everyCookie[cookie]} <br>`;
+    }
+  }
+  cookiesLeave = '<br> <a href="/Homepage.html">Go back to home page</a> <br><br> <a href="/eat-all-cookies">Eat Cookies</a>';
+  res.send(cookiesLeave);
+});
+
+app.get('/eat-all-cookies', function(req,res){
+  const everyCookie = req.cookie;
+
+  if(Object.keys(everyCookie).length>0){
+    for (const cookie in everyCookie){
+      res.clearCookie(cookie);
+    }
+    res.send("Successfully ate all cookies num num. <a href="/">Back to Default Page</a><br><br><a href="/show-me-my-cookies">Show me the cookies</a>");
+  }
+  else{
+    res.send("Could not eat all cookies :( . <a href="/"> Back to Default Page </a><br><br><a href="/show-me-my-cookies">Show me the cookies</a>")
+  }
 });
