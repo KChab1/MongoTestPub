@@ -36,7 +36,7 @@ app.post('/login', async function(req,res){
     }
   }catch(error){
     console.error("Failed to Login", error);
-    res.status(500).send("Failed to Login");
+    res.status(500).send('Login attempt failed. <br><br> <a href="/">Click to go back to default</a>');
   }finally{
     await mongoC.close();
   }
