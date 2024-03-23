@@ -73,7 +73,7 @@ app.get('/Homepage.html', function(req,res){
 
 //route for default
 app.get('/', function(req,res){
-  res.sendFile(__dirname + "/Homepage.html")
+  res.sendFile(__dirname + "/login.html")
 })
 
 //route for login screen
