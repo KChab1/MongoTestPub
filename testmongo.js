@@ -1,7 +1,7 @@
 const { MongoClient } = require("mongodb");
 const cookieParser = require("cookie-parser");
 // The uri string must be the connection string for the database (obtained on Atlas).
-const uri = "mongodb+srv://testUser12345:acoolpassword@cluster0.o8040xd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = "mongodb+srv://testUser12345:testme@cluster0.o8040xd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 // --- This is the standard stuff to get it to work on the browser
 const express = require('express');
 const app = express();
@@ -36,7 +36,7 @@ app.post('/login', async function(req,res){
     }
   }catch(error){
     console.error("Failed to Login", error);
-   // res.status(500).send('Login attempt failed.');
+  res.status(500).send('Login attempt failed. <br><br> <a href="/">Click to go back to default</a>'');
   }finally{
     await mongoC.close();
   }
